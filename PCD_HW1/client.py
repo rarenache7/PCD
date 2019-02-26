@@ -1,7 +1,7 @@
 import socket
 import sys
 import os
-
+import datetime
 
 def get_constants(prefix):
     """Create a dictionary mapping socket module
@@ -16,7 +16,7 @@ def get_constants(prefix):
 
 # Server protocol type
 sock_proto = ''
-buff_size = 4096  # default buffer size - small power of 2
+buff_size = 512  # default buffer size - small power of 2
 if sys.argv[1]:
     if sys.argv[1] == 'TCP':
         sock_proto = socket.SOCK_STREAM
@@ -41,11 +41,6 @@ if sys.argv[1] == 'TCP':
     print('connecting to {} port {}'.format(*server_address))
     sock.connect(server_address)
 
-print('Family  :', families[sock.family])
-print('Type    :', types[sock.type])
-print('Protocol:', protocols[sock.proto])
-print('Client socket info:', sock)
-
 try:
     send_file_fd = open(os.getcwd() + '\\client_storage\\send.mp4', 'rb')
     if sys.argv[1] == 'TCP':
@@ -54,13 +49,25 @@ try:
         data = send_file_fd.read(buff_size)
         data_count = 1
         print('Sent ', data_count * buff_size, ' bytes..')
+        start_timestamp = datetime.datetime.now()#.replace(microsecond=0)
         while data:
             sock.send(data)
             data = send_file_fd.read(buff_size)
             data_count += 1
             print('Sent ', data_count * buff_size, ' bytes..')
         sock.shutdown(socket.SHUT_WR)
+        end_timestamp = datetime.datetime.now()#.replace(microsecond=0)
         print('Done sending')
+        print('\nClient execution ended')
+        print('\n-------------------')
+        print('Client session info below:')
+        print('\tFamily  :', families[sock.family])
+        print('\tType    :', types[sock.type], '(' + sys.argv[1] + ')')
+        print('\tProtocol:', protocols[sock.proto])
+        print('\tData chunks read: ', data_count)
+        print('\tData bytes read: ', data_count * buff_size)
+        print('\tClient transmission time:', end_timestamp - start_timestamp)
+        print('-------------------\n')
     elif sys.argv[1] == 'UDP':
         # Send data
         #print('sending {!r}'.format(message))

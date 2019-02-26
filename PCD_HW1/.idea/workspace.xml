@@ -18,12 +18,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="68" column="32" selection-start-line="68" selection-start-column="32" selection-end-line="68" selection-end-column="32" />
+            <state relative-caret-position="494">
+              <caret line="100" selection-start-line="100" selection-end-line="100" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
                 <element signature="e#68#260#0" />
-                <element signature="e#407#541#0" />
               </folding>
             </state>
           </provider>
@@ -32,12 +31,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
-              <caret line="75" selection-start-line="75" selection-end-line="75" />
+            <state relative-caret-position="-16">
+              <caret line="27" selection-start-line="27" selection-end-line="27" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <element signature="e#58#250#0" />
-                <element signature="e#311#445#0" />
               </folding>
             </state>
           </provider>
@@ -174,12 +171,12 @@
       <updated>1551022026518</updated>
       <workItem from="1551022028985" duration="1336000" />
       <workItem from="1551119548560" duration="8000" />
-      <workItem from="1551119572762" duration="9706000" />
+      <workItem from="1551119572762" duration="10682000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11050000" />
+    <option name="totallyTimeSpent" value="12026000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -192,6 +189,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49798387" visible="true" weight="0.20268457" />
       <window_info id="Structure" order="1" sideWeight="0.5020161" side_tool="true" weight="0.20268457" />
@@ -232,24 +230,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="75" selection-start-line="75" selection-end-line="75" />
+        <state relative-caret-position="-16">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#58#250#0" />
-            <element signature="e#311#445#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="68" column="32" selection-start-line="68" selection-start-column="32" selection-end-line="68" selection-end-column="32" />
+        <state relative-caret-position="494">
+          <caret line="100" selection-start-line="100" selection-end-line="100" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
             <element signature="e#68#260#0" />
-            <element signature="e#407#541#0" />
           </folding>
         </state>
       </provider>

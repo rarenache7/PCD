@@ -16,7 +16,7 @@ def get_constants(prefix):
 
 # Server protocol type
 sock_proto = ''
-buff_size = 4096  # default buffer size - small power of 2
+buff_size = 512  # default buffer size - small power of 2
 if sys.argv[1]:  # Server protocol choice
     if sys.argv[1] == 'TCP':
         sock_proto = socket.SOCK_STREAM
@@ -40,14 +40,11 @@ server_address = (socket.gethostname(), 10001)
 print('starting up on {} port {}'.format(*server_address))
 sock.bind(server_address)
 
-print('Family  :', families[sock.family])
-print('Type    :', types[sock.type])
-print('Protocol:', protocols[sock.proto])
-
 # Listen for incoming connections
 if sys.argv[1] == 'TCP':
     sock.listen(3)  # 3 incoming connections at once supported
 
+client_id = 1
 while True:
     if sys.argv[1] == 'TCP':
         # Wait for a connection
@@ -55,7 +52,7 @@ while True:
         connection, client_address = sock.accept()
         print('Client connection from', client_address)
         # Open file descriptor to write received file
-        recv_file_fd = open(os.getcwd() + '\\server_storage\\recv.mp4', 'wb')
+        recv_file_fd = open(os.getcwd() + '\\server_storage\\recv' + str(client_id) + '.mp4', 'wb')
         # Receive the data in small chunks
         print('Receiving data bytes..\n')
         data_count = 1
@@ -70,6 +67,15 @@ while True:
         recv_file_fd.close()
         # Clean up the connection
         connection.close()
+        print('\nSession closed to client', client_id)
+        print('\n-------------------')
+        print('Server session info below:')
+        print('\tFamily  :', families[sock.family])
+        print('\tType    :', types[sock.type], '(' + sys.argv[1] + ')')
+        print('\tProtocol:', protocols[sock.proto])
+        print('\tData chunks written: ', data_count)
+        print('\tData bytes written: ', data_count * buff_size)
+        print('-------------------\n')
     elif sys.argv[1] == 'UDP':
         print('\nwaiting to receive message')
         data, address = sock.recvfrom(4096)
@@ -77,6 +83,16 @@ while True:
         print('received {} bytes from {}'.format(
             len(data), address))
         print(data)
+
+        print('\nSession closed to client', client_id)
+        print('\n-------------------')
+        print('Server session info below:')
+        print('\tFamily  :', families[sock.family])
+        print('\tType    :', types[sock.type], '(' + sys.argv[1] + ')')
+        print('\tProtocol:', protocols[sock.proto])
+        print('\tData chunks read: ', data_count)
+        print('\tData bytes read: ', data_count * buff_size)
+        print('-------------------\n')
 
         if data:
             sent = sock.sendto(data, address)
