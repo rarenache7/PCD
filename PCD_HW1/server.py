@@ -40,8 +40,6 @@ server_address = (socket.gethostname(), 10001)
 print('starting up on {} port {}'.format(*server_address))
 sock.bind(server_address)
 
-recv_file_fd = open(os.getcwd() + '\\server_storage\\recv.mp4', 'wb')
-
 print('Family  :', families[sock.family])
 print('Type    :', types[sock.type])
 print('Protocol:', protocols[sock.proto])
@@ -55,24 +53,23 @@ while True:
         # Wait for a connection
         print('Waiting for a connection..\n')
         connection, client_address = sock.accept()
-        try:
-            print('Client connection from', client_address)
-            # Receive the data in small chunks and retransmit it
-            while True:
-                print('Receiving data bytes..\n')
-                data_count = 1
-                data = connection.recv(buff_size)
-                print('received {!r}'.format(data))
-                if data:
-                    print('sending data back to the client')
-                    connection.send(data)
-                else:
-                    print('no data from', client_address)
-                    break
-
-        finally:
-            # Clean up the connection
-            connection.close()
+        print('Client connection from', client_address)
+        # Open file descriptor to write received file
+        recv_file_fd = open(os.getcwd() + '\\server_storage\\recv.mp4', 'wb')
+        # Receive the data in small chunks
+        print('Receiving data bytes..\n')
+        data_count = 1
+        data = connection.recv(buff_size)
+        print('Received ', data_count * buff_size, ' bytes of data..')
+        while data:
+            recv_file_fd.write(data)
+            data = connection.recv(buff_size)
+            data_count += 1
+            print('Received ', data_count * buff_size, ' bytes of data..')
+        print('Done receiving!')
+        recv_file_fd.close()
+        # Clean up the connection
+        connection.close()
     elif sys.argv[1] == 'UDP':
         print('\nwaiting to receive message')
         data, address = sock.recvfrom(4096)
