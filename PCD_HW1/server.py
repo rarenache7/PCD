@@ -16,7 +16,9 @@ def get_constants(prefix):
 
 # Server protocol type
 sock_proto = ''
+# Package / buffer size
 buff_size = 512  # default buffer size - small power of 2
+
 if sys.argv[1]:  # Server protocol choice
     if sys.argv[1] == 'TCP':
         sock_proto = socket.SOCK_STREAM
@@ -52,7 +54,7 @@ while True:
         connection, client_address = sock.accept()
         print('Client connection from', client_address)
         # Open file descriptor to write received file
-        recv_file_fd = open(os.getcwd() + '\\server_storage\\recv' + str(client_id) + '.mp4', 'wb')
+        recv_file_fd = open(os.getcwd() + '/recv' + str(client_id), 'wb')
         # Receive the data in small chunks
         print('Receiving data bytes..\n')
         data_count = 1
@@ -77,12 +79,21 @@ while True:
         print('\tData bytes written: ', data_count * buff_size)
         print('-------------------\n')
     elif sys.argv[1] == 'UDP':
-        print('\nwaiting to receive message')
-        data, address = sock.recvfrom(4096)
-
-        print('received {} bytes from {}'.format(
-            len(data), address))
-        print(data)
+        recv_file_fd = open(os.getcwd() + '/recv' + str(client_id), 'wb')
+        data_count = 1
+        print('\nWaiting to receive data bytes..')
+        data, address = sock.recvfrom(buff_size)
+        # while len(data) < buff_size:
+        print('Received ', data_count * buff_size, ' bytes of data..')
+        while data:
+            recv_file_fd.write(data)
+            data, address = sock.recvfrom(buff_size)
+            if data.decode() == 'done':
+                break
+            data_count += 1
+            print('Received ', data_count * buff_size, ' bytes of data..')
+        print('Done receiving!')
+        recv_file_fd.close()
 
         print('\nSession closed to client', client_id)
         print('\n-------------------')
@@ -90,8 +101,8 @@ while True:
         print('\tFamily  :', families[sock.family])
         print('\tType    :', types[sock.type], '(' + sys.argv[1] + ')')
         print('\tProtocol:', protocols[sock.proto])
-        print('\tData chunks read: ', data_count)
-        print('\tData bytes read: ', data_count * buff_size)
+        print('\tData chunks written: ', data_count)
+        print('\tData bytes written: ', data_count * buff_size)
         print('-------------------\n')
 
         if data:
