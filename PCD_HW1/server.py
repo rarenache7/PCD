@@ -79,16 +79,17 @@ while True:
         print('\tData bytes written: ', data_count * buff_size)
         print('-------------------\n')
     elif sys.argv[1] == 'UDP':
-        recv_file_fd = open(os.getcwd() + '/recv' + str(client_id), 'wb')
         data_count = 1
         print('\nWaiting to receive data bytes..')
         data, address = sock.recvfrom(buff_size)
         # while len(data) < buff_size:
+        recv_file_fd = open(os.getcwd() + '/recv' + str(client_id), 'wb')
         print('Received ', data_count * buff_size, ' bytes of data..')
         while data:
             recv_file_fd.write(data)
             data, address = sock.recvfrom(buff_size)
-            if data.decode() == 'done':
+            if data.decode('ISO-8859-1') == 'done':
+                print('Transfer is done!')
                 break
             data_count += 1
             print('Received ', data_count * buff_size, ' bytes of data..')
@@ -104,8 +105,3 @@ while True:
         print('\tData chunks written: ', data_count)
         print('\tData bytes written: ', data_count * buff_size)
         print('-------------------\n')
-
-        if data:
-            sent = sock.sendto(data, address)
-            print('sent {} bytes back to {}'.format(
-                sent, address))

@@ -90,7 +90,7 @@ try:
             data_count += 1
         send_file_fd.close()
         transfer_done_flag = 'done'
-        traffic_sent = sock.sendto(transfer_done_flag.encode(), server_address)
+        traffic_sent = sock.sendto(transfer_done_flag.encode('ISO-8859-1'), server_address)
         end_timestamp = datetime.datetime.now()  # .replace(microsecond=0)
         print('Done sending')
         print('\nClient execution ended')
