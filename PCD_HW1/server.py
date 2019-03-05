@@ -22,8 +22,7 @@ def get_constants(prefix):
 
 # Get statistics at the end of client's execution
 def get_stats():
-    print('Done sending')
-    print('\nClient execution ended')
+    print('\nClient session ended')
     print('\n-------------------')
     print('Client session info below:')
     print('\tFamily  :', families[sock.family])
@@ -88,34 +87,26 @@ while True:
         recv_file_fd = open(os.getcwd() + '/recv' + str(client_id), 'wb')
         # Receive the data in small chunks
         print('Receiving data bytes..\n')
-        data_count = 1
+        data_count = 0
         data = connection.recv(pack_size)
-        print('Received ', data_count * pack_size, ' bytes of data..')
+        # print('Received ', pack_size, ' bytes of data..')
         while data:
             recv_file_fd.write(data)
             data = connection.recv(pack_size)
             data_count += 1
-            print('Received ', data_count * pack_size, ' bytes of data..')
+            # print('Received ', data_count * pack_size, ' bytes of data..')
         print('Done receiving!')
         recv_file_fd.close()
         # Clean up the connection
         connection.close()
-        print('\nSession closed to client', client_id)
-        print('\n-------------------')
-        print('Server session info below:')
-        print('\tFamily  :', families[sock.family])
-        print('\tType    :', types[sock.type], '(' + sys.argv[1] + ')')
-        print('\tProtocol:', protocols[sock.proto])
-        print('\tData chunks written: ', data_count)
-        print('\tData bytes written: ', data_count * pack_size)
-        print('-------------------\n')
+        get_stats()
     elif sys.argv[1] == 'UDP':
         data_count = 1
         print('\nWaiting to receive data bytes..')
         data, address = sock.recvfrom(pack_size)
         # while len(data) < pack_size:
         recv_file_fd = open(os.getcwd() + '/recv' + str(client_id), 'wb')
-        print('Received ', data_count * pack_size, ' bytes of data..')
+        # print('Received ', data_count * pack_size, ' bytes of data..')
         while data:
             recv_file_fd.write(data)
             data, address = sock.recvfrom(pack_size)
@@ -123,16 +114,8 @@ while True:
                 print('Transfer is done!')
                 break
             data_count += 1
-            print('Received ', data_count * pack_size, ' bytes of data..')
+            # print('Received ', data_count * pack_size, ' bytes of data..')
         print('Done receiving!')
+        data_count -= 1
         recv_file_fd.close()
-
-        print('\nSession closed to client', client_id)
-        print('\n-------------------')
-        print('Server session info below:')
-        print('\tFamily  :', families[sock.family])
-        print('\tType    :', types[sock.type], '(' + sys.argv[1] + ')')
-        print('\tProtocol:', protocols[sock.proto])
-        print('\tData chunks written: ', data_count)
-        print('\tData bytes written: ', data_count * pack_size)
-        print('-------------------\n')
+        get_stats()

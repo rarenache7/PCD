@@ -60,7 +60,7 @@ def set_file_name(given_name):
 
 determine_connection_type(sys.argv[1])
 set_packet_size(sys.argv[2])
-# set_file_name(sys.argv[3])
+set_file_name(sys.argv[3])
 print('Chosen server protocol: ', sys.argv[1])
 
 families = get_constants('AF_')
@@ -79,16 +79,17 @@ try:
     transfer_done_flag = ''
     if sys.argv[1] == 'TCP':
         send_file_fd = open(os.getcwd() + '/' + file_name, 'rb')
-        # Send data
         print('Sending data bytes..\n')
         data = send_file_fd.read(pack_size)
         data_count = 1
         start_timestamp = datetime.datetime.now()#.replace(microsecond=0)
+        # Send data
         while data:
             sock.send(data)
-            print('Sent ', data_count * pack_size, ' bytes..')
+            # print('Sent ', data_count * pack_size, ' bytes..')
             data = send_file_fd.read(pack_size)
             data_count += 1
+        data_count -= 1
         sock.shutdown(socket.SHUT_WR)
         send_file_fd.close()
         end_timestamp = datetime.datetime.now()#.replace(microsecond=0)
@@ -104,9 +105,10 @@ try:
             traffic_sent = sock.sendto(data, server_address)
             while traffic_sent < pack_size and len(data) == pack_size:
                 traffic_sent = sock.sendto(data, server_address)
-            print('Sent ', data_count * pack_size, ' bytes..')
+            # print('Sent ', data_count * pack_size, ' bytes..')
             data = send_file_fd.read(pack_size)
             data_count += 1
+        data_count -= 1
         send_file_fd.close()
         transfer_done_flag = 'done'
         traffic_sent = sock.sendto(transfer_done_flag.encode('ISO-8859-1'), server_address)
