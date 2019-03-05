@@ -98,6 +98,8 @@ try:
         end_timestamp = datetime.datetime.now() #.replace(microsecond=0)
         get_stats()
     elif sys.argv[1] == 'UDP':
+        sock.settimeout(2)
+        ACK = '0'
         send_file_fd = open(os.getcwd() + '/' + file_name, 'rb')
         print('Sending data bytes..\n')
         data_size = 0
@@ -108,12 +110,15 @@ try:
         # Send data
         while data:
             traffic_sent = sock.sendto(data, server_address)
-            while traffic_sent < pack_size and len(data) == pack_size:
+            traffic_received, address = sock.recvfrom(pack_size)
+            if traffic_received.decode('ISO-8859-1') == '1':
+                ACK = '1'
+                data = send_file_fd.read(pack_size)
+                data_size += len(data)
+                data_count += 1
+            else:
+                ACK = '0'
                 traffic_sent = sock.sendto(data, server_address)
-            # print('Sent ', data_count * pack_size, ' bytes..')
-            data = send_file_fd.read(pack_size)
-            data_size += len(data)
-            data_count += 1
         data_count -= 1
         send_file_fd.close()
         transfer_done_flag = 'done'

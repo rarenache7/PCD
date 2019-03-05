@@ -104,10 +104,19 @@ while True:
         connection.close()
         get_stats()
     elif sys.argv[1] == 'UDP':
+        sock.settimeout(2)
+        dgram_ACK = '0'
         data_count = 1
         data_size = 0
         print('\nWaiting to receive data bytes..')
         data, address = sock.recvfrom(pack_size)
+        # Stop-n-wait UDP
+        while len(data) < pack_size:
+            dgram_ACK = '0'
+            sock.sendto(dgram_ACK.encode('ISO-8859-1'), address)
+        else:
+            dgram_ACK = '1'
+            sock.sendto(dgram_ACK.encode('ISO-8859-1'), address)
         data_size += len(data)
         # while len(data) < pack_size:
         recv_file_fd = open(os.getcwd() + '/recv' + str(client_id), 'wb')
@@ -115,9 +124,20 @@ while True:
         while data:
             recv_file_fd.write(data)
             data, address = sock.recvfrom(pack_size)
+            # Stop-n-wait UDP
             if data.decode('ISO-8859-1') == 'done':
                 print('Transfer is done!')
                 break
+            while 0 < len(data) < pack_size:
+                # if len(data) == 0:
+                #     continue
+                dgram_ACK = '0'
+                print('\tDGRAM NOT OK ')
+                sock.sendto(dgram_ACK.encode('ISO-8859-1'), address)
+            else:
+                dgram_ACK = '1'
+                # print('\tDGRAM OK')
+                sock.sendto(dgram_ACK.encode('ISO-8859-1'), address)
             data_count += 1
             data_size += len(data)
             # print('Received ', data_count * pack_size, ' bytes of data..')
