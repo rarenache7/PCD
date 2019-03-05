@@ -29,7 +29,7 @@ def get_stats():
     print('\tType    :', types[sock.type], '(' + sys.argv[1] + ')')
     print('\tProtocol:', protocols[sock.proto])
     print('\tData chunks read: ', data_count)
-    print('\tData bytes read: ', data_count * pack_size)
+    print('\tData bytes read: ', data_size)
     print('-------------------\n')
 
 
@@ -88,11 +88,14 @@ while True:
         # Receive the data in small chunks
         print('Receiving data bytes..\n')
         data_count = 0
+        data_size = 0
         data = connection.recv(pack_size)
+        data_size += len(data)
         # print('Received ', pack_size, ' bytes of data..')
         while data:
             recv_file_fd.write(data)
             data = connection.recv(pack_size)
+            data_size += len(data)
             data_count += 1
             # print('Received ', data_count * pack_size, ' bytes of data..')
         print('Done receiving!')
@@ -102,8 +105,10 @@ while True:
         get_stats()
     elif sys.argv[1] == 'UDP':
         data_count = 1
+        data_size = 0
         print('\nWaiting to receive data bytes..')
         data, address = sock.recvfrom(pack_size)
+        data_size += len(data)
         # while len(data) < pack_size:
         recv_file_fd = open(os.getcwd() + '/recv' + str(client_id), 'wb')
         # print('Received ', data_count * pack_size, ' bytes of data..')
@@ -114,6 +119,7 @@ while True:
                 print('Transfer is done!')
                 break
             data_count += 1
+            data_size += len(data)
             # print('Received ', data_count * pack_size, ' bytes of data..')
         print('Done receiving!')
         data_count -= 1

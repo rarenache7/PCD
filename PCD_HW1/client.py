@@ -32,7 +32,7 @@ def get_stats():
     print('\tType    :', types[sock.type], '(' + sys.argv[1] + ')')
     print('\tProtocol:', protocols[sock.proto])
     print('\tData chunks read: ', data_count)
-    print('\tData bytes read: ', data_count * pack_size)
+    print('\tData bytes read: ', data_size)
     print('\tClient transmission time:', end_timestamp - start_timestamp)
     print('-------------------\n')
 
@@ -80,25 +80,30 @@ try:
     if sys.argv[1] == 'TCP':
         send_file_fd = open(os.getcwd() + '/' + file_name, 'rb')
         print('Sending data bytes..\n')
+        data_size = 0
         data = send_file_fd.read(pack_size)
         data_count = 1
+        data_size += len(data)
         start_timestamp = datetime.datetime.now()#.replace(microsecond=0)
         # Send data
         while data:
             sock.send(data)
             # print('Sent ', data_count * pack_size, ' bytes..')
             data = send_file_fd.read(pack_size)
+            data_size += len(data)
             data_count += 1
         data_count -= 1
         sock.shutdown(socket.SHUT_WR)
         send_file_fd.close()
-        end_timestamp = datetime.datetime.now()#.replace(microsecond=0)
+        end_timestamp = datetime.datetime.now() #.replace(microsecond=0)
         get_stats()
     elif sys.argv[1] == 'UDP':
         send_file_fd = open(os.getcwd() + '/' + file_name, 'rb')
         print('Sending data bytes..\n')
+        data_size = 0
         data = send_file_fd.read(pack_size)
         data_count = 1
+        data_size += len(data)
         start_timestamp = datetime.datetime.now()  # .replace(microsecond=0)
         # Send data
         while data:
@@ -107,6 +112,7 @@ try:
                 traffic_sent = sock.sendto(data, server_address)
             # print('Sent ', data_count * pack_size, ' bytes..')
             data = send_file_fd.read(pack_size)
+            data_size += len(data)
             data_count += 1
         data_count -= 1
         send_file_fd.close()
