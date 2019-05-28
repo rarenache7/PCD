@@ -24,4 +24,14 @@ function addOperation(){
         	alert("Eror from server: " + response.message);
 		}
     });
+
+    ris.startSwarm("AccountManagement", "create", operationData.balance, operationData.uname)
+    .onReturn(function(err, accountId){
+        if(err){
+            console.log(err);
+        } else {
+            console.log("Succes");
+        }
+    });
+    
 }

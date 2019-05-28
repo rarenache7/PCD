@@ -1,7 +1,12 @@
+module.exports = $$.library(function(){
+    require("./Account.js");
+    require("./AccountManagement.js");
+});
+
 $$.swarms.describe("Register1", {
     register: function (user) {
         console.log("AICI");
-        var file = "myJson.json"
+        var file = "database.json"
         console.log("Register new user");
         var fs = require('fs');
         var succes = true;
@@ -79,7 +84,7 @@ $$.swarms.describe("Register1", {
         console.log("email " + user.email);
         console.log(user.password);
         console.log("___________________");
-        var file = "myJson.json"
+        var file = "database.json"
         var fs = require('fs');
         var self = this;
         if (fs.existsSync(file)) {
@@ -119,7 +124,7 @@ $$.swarms.describe("Register1", {
     },
 
     addOperation: function (operationData) {
-        var file = "myJson.json"
+        var file = "database.json"
         var fs = require('fs');
         var self = this;
         if (fs.existsSync(file)) {
