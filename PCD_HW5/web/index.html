@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PSK web</title>
+    <script src="../builds/devel/pskclient.js"></script>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body>
+    <div class="content">
+        <div>
+
+            <div class="container">
+
+                <label for="username"><b>Username</b></label>
+                <input type="text" class="w3-input" placeholder="Enter Username" name="username" id="username" required><br>
+
+                <label for="password"><b>Password</b></label>
+                <input type="password" class="w3-input" placeholder="Enter Password" name="password" required id="password"><br>
+
+                <button class="w3-button w3-white w3-border w3-border-blue" value="Submit" onclick="login()">Submit</button>
+            </div>
+            <div>
+            </div>
+            <script>
+                function login() {
+                    var uname = document.getElementById("username");
+                    var password = document.getElementById("password");
+
+                    loginData = {
+                        uname: uname.value,
+                        password: password.value
+                    }
+                    console.log(uname.value);
+                    console.log(password.value);
+                    const interact = pskclientRequire("interact");
+                    interact.enableRemoteInteractions();
+                    const ris = interact.createRemoteInteractionSpace('testLogin', 'http://127.0.0.1:8080', 'local/agent/expense');
+
+                    ris.startSwarm('Register1', 'login', loginData).onReturn(function (response) {
+                        console.log(`Returning message "${response.message}"`);
+                        if (response.succes === true) {
+                            var uname = response.uname;
+                            var q = "?user=" + uname + "&balance=" + response.balance;
+                            window.location.href = "account.html" + q;
+                        } else {
+                            console.log('Logging error');
+                        }
+                    });
+                }
+
+            </script>
+</body>
+
+</html>

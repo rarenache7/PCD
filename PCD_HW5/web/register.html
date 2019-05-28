@@ -1,0 +1,35 @@
+<html>
+<meta charset="UTF-8">
+<head>
+    <title>Register</title>
+     <script src="../builds/devel/pskclient.js"></script>
+     <script src="register.js"></script>
+     <link rel="stylesheet" type="text/css" href="mystyle.css">
+     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body>
+    <div class="content">
+        <div>
+           
+            <div class="container">
+         
+                <label for="uname"><b>Username</b></label>
+                <input type="text" class="w3-input" placeholder="Enter Username" name="uname" id="uname" required><br>
+
+                <label for="password"><b>Password</b></label>
+                <input type="password" class="w3-input" placeholder="Enter Password" name="password" required id ="password"><br>
+
+                <label for="email"><b>Email</b></label>
+                <input type="text" class="w3-input" placeholder="Enter email" name="email" id="email"
+                    required><br>
+
+                <label for="amountV"><b>Initial Balance</b></label>
+                <input type="number" class="w3-input" value="0" name="initBalance" required id="initBalance"><br>
+
+                <button class="w3-button w3-white w3-border w3-border-blue" value="Submit" onclick="register()">Submit</button>
+            </div>
+        <div>
+    </div>
+
+</html>

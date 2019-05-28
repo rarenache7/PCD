@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PSK web</title>
+    <script src="../builds/devel/pskclient.js"></script>
+    <script src="addOperation.js"></script>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body>
+    <div class="content">
+        <div class="container">
+
+            <input type="hidden" id="sessionId" value="" />
+
+            <label for="actualBalance"><b>Actual Balance</b></label>
+            <input type="number" class="w3-input" readonly placeholder="Actual Balance" name="actualBalance" id="actualBalance"
+                value="">
+            
+            <br>
+
+            <script>
+                    var search = decodeURIComponent(window.location.search);
+                    var queryString = search.substring(1);
+                    var queries = queryString.split("&");
+                    var n = queryString.split("&")[0];
+                    var uname = n.substr(5, n.length);
+                    document.getElementById('sessionId').value = uname;
+                    var b = queryString.split("&")[1];
+                    var balance = b.substr(8, b.length);
+                    document.getElementById('actualBalance').value = balance;
+            </script>
+
+            <label for="amountV"><b>Amount</b></label>
+            <input type="number" class="w3-input" placeholder="Amount" name="amountV" required id="amountV"><br>
+
+            <label for="operationType"><b>Operation Type</b></label>
+            <select id="operationType" class="w3-input">
+                    <option value="expense">Expense</option>
+                    <option value="income">Income</option>
+            </select>
+            <br>
+
+            <button class="w3-button w3-white w3-border w3-border-blue" value="Submit" onclick="addOperation()">Submit</button>
+        </div>
+    </div>
+</body>
+</html>
